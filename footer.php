@@ -1,8 +1,16 @@
-		<div class="container">
-			<div class="row">
-				<div class="col">
-					<footer id="main-footer">
 
+            <footer id="main-footer">
+                <div class="d-flex align-items-center justify-content-between">
+                    <?php
+                        $logo = get_custom_logo();
+                        if ($logo != null){
+                            $logo;
+                        }
+                    ?>
+                    <div>
+                        2022  Figma Template by ESGI
+                    </div>
+                    <div>
                         <?php
                         $url_facebook = get_theme_mod('url_facebook', null);
                         if($url_facebook != null){
@@ -16,10 +24,9 @@
                             echo "<a href='".$url_linkedin."'> ".getIcon('linkedIn')."</a>";
                         }
                         ?>
-					</footer>
-				</div>
-			</div>
-		</div>
+                    </div>
+                </div>
+            </footer>
 		<?php wp_footer() ?>
 	</body>
 </html>
