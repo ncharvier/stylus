@@ -1,0 +1,15 @@
+$text-color: #000;
+$main-color: #050A3A;
+$white: #FFF;
+
+html{
+	--text-color: #{$text-color};
+	--main-color: #{$main-color};
+	--white: #{$white};
+	--bg-color: #{$white};
+}
+
+body{
+	background-color: var(--bg-color);
+	color: var(--text-color);
+}

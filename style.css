@@ -12128,3 +12128,20 @@ fieldset:disabled .btn {
   }
 }
 
+html {
+  --text-color: #000;
+  --main-color: #050A3A;
+  --white: #FFF;
+  --bg-color: #FFF;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+#main-footer {
+  padding: 10vw;
+  background-color: var(--bg-color);
+}
+
