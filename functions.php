@@ -21,9 +21,9 @@ function getIcon($name){
 
 function stylus_customize_register($wp_customize)
 {
-    $wp_customize->add_section( 'esgi-custom', [
-        'title' => __('Personnalisation du thème'),
-        'description' => __('Paramètres du thème.'),
+    $wp_customize->add_section( 'social-media-custom', [
+        'title' => __('Personnalisation des réseaux sociaux'),
+        'description' => __('Personnalisation des lien des réseaux sociaux.'),
         'priority' => 1,
         'capability' => 'edit_theme_options',
     ] );
@@ -34,18 +34,18 @@ function stylus_customize_register($wp_customize)
 
     $wp_customize->add_control('url_facebook', [
         'type' => 'text',
-        'section' => 'esgi-custom', // Add a default or your own section
+        'section' => 'social-media-custom', // Add a default or your own section
         'label' => __('url du facebook'),
         'description' => __('url du facebook'),
     ]);
 
-    $wp_customize->add_setting( 'url_linkedin', [
+    $wp_customize->add_setting( 'url_linkedIn', [
         'default' => null,
     ] );
 
-    $wp_customize->add_control( 'url_linkedin', [
+    $wp_customize->add_control( 'url_linkedIn', [
         'type' => 'text',
-        'section' => 'esgi-custom', // Add a default or your own section
+        'section' => 'social-media-custom', // Add a default or your own section
         'label' => __( 'url du linkedin' ),
         'description' => __( 'url du linkedin' ),
     ] );

@@ -1,4 +1,9 @@
 		<div class="container">
+            <div class="row">
+                <div class="col-4">
+
+                </div>
+            </div>
 			<div class="row">
 				<div class="col-md-6 offset-3">
 					<footer id="site-footer">
@@ -11,7 +16,7 @@
                         ?>
 
                         <?php
-                        $url_linkedin = get_theme_mod('url_linkedin', null);
+                        $url_linkedin = get_theme_mod('url_linkedIn', null);
                         if($url_linkedin != null){
                             echo "<a href='".$url_linkedin."'> ".getIcon('linkedin')."</a>";
                         }
