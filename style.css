@@ -12141,7 +12141,12 @@ body {
 }
 
 #main-footer {
-  padding: 10vw;
-  background-color: var(--bg-color);
+  padding: 2.5rem 10vw;
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+#main-footer svg {
+  fill: var(--white);
 }
 
