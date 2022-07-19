@@ -1,12 +1,16 @@
 
             <footer id="main-footer">
                 <div class="d-flex align-items-center justify-content-between">
-                    <?php
+                    <div class="footer-logo">
+                        <?php
                         $logo = get_custom_logo();
                         if ($logo != null){
-                            $logo;
+                            echo $logo;
                         }
-                    ?>
+                        ?>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
                     <div>
                         2022  Figma Template by ESGI
                     </div>
