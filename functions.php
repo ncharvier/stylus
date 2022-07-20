@@ -76,6 +76,17 @@ function ajax_load_posts(){
     wp_die();
 }
 
+function html5_search_form( $form ) {
+    $form = '<section class="search"><form role="search" method="get" id="search-form" action="' . home_url( '/' ) . '" >
+    <label class="screen-reader-text" for="s">' . __('',  'domain') . '</label>
+     <input type="search" value="' . get_search_query() . '" name="s" id="searchinput" placeholder="Type to search" />
+     <input type="submit" id="searchsubmit" value="'. esc_attr__('Go', 'domain') .'" />
+     </form></section>';
+    return $form;
+}
+
+add_filter( 'get_search_form', 'html5_search_form' );
+
     
 
 

@@ -12129,7 +12129,7 @@ fieldset:disabled .btn {
 }
 
 html {
-  --text-color: #000;
+  --text-color: #8A8A8A;
   --main-color: #050A3A;
   --white: #FFF;
   --bg-color: #FFF;
@@ -12150,13 +12150,20 @@ body {
   fill: var(--white);
 }
 
-input.search-field {
-  width: 90% !important;
-  display: flex !important;
-  margin: auto !important;
-}
-
 #searchsubmit {
   display: none;
+}
+
+#searchinput {
+  border: unset;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--text-color);
+  margin: 1em 0;
+  padding: 0.5em;
+}
+
+#searchinput ::after {
+  justify-content: end;
 }
 

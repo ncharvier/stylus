@@ -1,9 +1,15 @@
-input.search-field {
-  width: 90% !important;
-  display: flex !important;
-  margin: auto !important;
-}
-
 #searchsubmit{
   display: none;
+}
+
+#searchinput{
+  border: unset;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--text-color);
+  margin: 1em 0;
+  padding: 0.5em;
+  ::after{
+    justify-content: end;
+  }
 }
