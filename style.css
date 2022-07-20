@@ -12138,6 +12138,13 @@ html {
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body main {
+  flex-grow: 1;
 }
 
 #main-footer {
@@ -12147,6 +12154,10 @@ body {
 }
 
 #main-footer svg {
+  fill: var(--white);
+}
+
+#main-footer .footer-logo {
   fill: var(--white);
 }
 
