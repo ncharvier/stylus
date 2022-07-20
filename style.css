@@ -12128,3 +12128,53 @@ fieldset:disabled .btn {
   }
 }
 
+html {
+  --text-color: #8A8A8A;
+  --main-color: #050A3A;
+  --white: #FFF;
+  --bg-color: #FFF;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body main {
+  flex-grow: 1;
+}
+
+#main-footer {
+  padding: 2.5rem 10vw;
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+#main-footer svg {
+  fill: var(--white);
+}
+
+#main-footer .footer-logo {
+  fill: var(--white);
+}
+
+#searchsubmit {
+  display: none;
+}
+
+#searchinput {
+  border: unset;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--text-color);
+  margin: 1em 0;
+  padding: 0.5em;
+}
+
+#searchinput ::after {
+  justify-content: end;
+}
+

@@ -4,7 +4,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-6 offset-3">
-test
+                    test
+                    <?php get_search_form(); ?>
                 </div>
             </div>
         </div>
