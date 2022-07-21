@@ -1,100 +1,444 @@
-<?php 
+<?php
 
-add_theme_support( 'custom-logo' );
-add_theme_support( 'post-thumbnails' );
-add_theme_support( 'widgets' );
+// Ajouter la prise en charge des images mises en avant
+add_theme_support('post-thumbnails');
 
+// Ajouter automatiquement le titre du site dans l'en-tête du site
+add_theme_support('title-tag');
 
-function esgi_enqueue_assets() {
-    wp_enqueue_style('main', get_stylesheet_uri() );
-}
-add_action( 'wp_enqueue_scripts', 'esgi_enqueue_assets' );
+// Ajouter la fonctionnalité de logo custom
+add_theme_support('custom-logo');
 
-function getIcon($name){
-    
-    $facebook = '<svg width="12" height="18" viewBox="0 0 12 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3.4008 18L3.375 10.125H0V6.75H3.375V4.5C3.375 1.4634 5.25545 0 7.9643 0C9.26187 0 10.3771 0.0966038 10.7021 0.139781V3.3132L8.82333 3.31406C7.35011 3.31406 7.06485 4.01411 7.06485 5.04139V6.75H11.25L10.125 10.125H7.06484V18H3.4008Z"/>
-</svg>';
-
-    $linkedIn = '<svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17.9698 0H1.64687C1.19966 0 0.864258 0.335404 0.864258 0.782609V17.2174C0.864258 17.5528 1.19966 17.8882 1.64687 17.8882H18.0816C18.5289 17.8882 18.8643 17.5528 18.8643 17.1056V0.782609C18.7525 0.335404 18.4171 0 17.9698 0ZM3.54749 15.205V6.70807H6.23072V15.205H3.54749ZM4.8891 5.59006C3.99469 5.59006 3.32389 4.80745 3.32389 4.02484C3.32389 3.13043 3.99469 2.45963 4.8891 2.45963C5.78351 2.45963 6.45432 3.13043 6.45432 4.02484C6.34252 4.80745 5.67171 5.59006 4.8891 5.59006ZM16.0692 15.205H13.386V11.0683C13.386 10.0621 13.386 8.8323 12.0444 8.8323C10.7028 8.8323 10.4792 9.95031 10.4792 11.0683V15.3168H7.79593V6.70807H10.3674V7.82609C10.7028 7.15528 11.5972 6.48447 12.827 6.48447C15.5102 6.48447 15.9574 8.27329 15.9574 10.5093V15.205H16.0692Z"/>
-</svg>';
-
-    $menu = '<svg width="40" height="10" viewBox="0 0 40 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="40" height="3"/>
-<rect x="19" y="7" width="21" height="3"/>
-</svg>';
-
-	return $$name;
-
-}
-
-function stylus_customize_register($wp_customize)
+// Add menu support
+function register_my_menus()
 {
-    $wp_customize->add_section( 'social-media-custom', [
-        'title' => __('Personnalisation des réseaux sociaux'),
-        'description' => __('Personnalisation des lien des réseaux sociaux.'),
-        'priority' => 1,
-        'capability' => 'edit_theme_options',
-    ] );
+  register_nav_menus(
+    array(
+      'header-menu' => __('Header Menu'),
+    )
+  );
+}
+add_action('init', 'register_my_menus');
 
-    $wp_customize->add_setting('url_facebook', [
-        'default' => null,
-    ]);
+// Style sheet loading
+wp_enqueue_scripts('style', get_stylesheet_uri());
+wp_enqueue_style('style', get_template_directory_uri() . '/style.css', false, '1.1', 'all');
 
-    $wp_customize->add_control('url_facebook', [
-        'type' => 'text',
-        'section' => 'social-media-custom', // Add a default or your own section
-        'label' => __('url du facebook'),
-        'description' => __('url du facebook'),
-    ]);
 
-    $wp_customize->add_setting( 'url_linkedIn', [
-        'default' => null,
-    ] );
+$esgi_includes = array(
+  '/enqueue.php',                         // Enqueue scripts and styles.
+);
 
-    $wp_customize->add_control( 'url_linkedIn', [
-        'type' => 'text',
-        'section' => 'social-media-custom', // Add a default or your own section
-        'label' => __( 'url du linkedin' ),
-        'description' => __( 'url du linkedin' ),
-    ] );
+function wpc_mime_types($mimes)
+{
+  $mimes['svg'] = 'image/svg+xml';
+  return $mimes;
+}
+add_filter('upload_mimes', 'wpc_mime_types');
+
+foreach ($esgi_includes as $file) {
+  require_once get_theme_file_path($file);
 }
 
-add_action('customize_register', 'stylus_customize_register');
+function themename_widgets_init()
+{
+  register_sidebar(array(
+    'name'          => __('Primary Sidebar', 'esgi'),
+    'id'            => 'sidebar-1',
+    'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+    'after_widget'  => '</aside>',
+    'before_title'  => '<h3 class="widget-title">',
+    'after_title'   => '</h3>',
+  ));
 
-function ajax_load_posts(){
-    // page demandée
-    $paged = $_POST['page']; 
-    $args = [
-        'post_type' => 'post',
-        'posts_per_page' => 2,
-        'post_status' => 'publish',
-        'paged' => $paged
-    ];
-    $the_query = new WP_Query($args);
-    // Mise en buffer
-    ob_start(); // ouverture du buffer
-    include('template-parts/post-list.php');
-    // Récupération du contenu du buffer
-    echo ob_get_clean(); // fermeture du buffer
-    wp_die();
+  register_sidebar(array(
+    'name'          => __('Secondary Sidebar', 'esgi'),
+    'id'            => 'sidebar-2',
+    'before_widget' => '<ul><li id="%1$s" class="widget %2$s">',
+    'after_widget'  => '</li></ul>',
+    'before_title'  => '<h3 class="widget-title">',
+    'after_title'   => '</h3>',
+  ));
 }
+
+function customizer($wp_customize)
+{
+  $wp_customize->add_section(
+    'example_section_one',
+    array(
+      'title' => 'Partners Section',
+      'description' => 'Set up 6 images as partners of your brand.',
+      'priority' => 35,
+    )
+  );
+
+  $wp_customize->add_setting('img-upload1');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload1',
+      array(
+        'label' => 'Brand Partner 1',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload1'
+      )
+    )
+  );
+
+  $wp_customize->add_setting('img-upload2');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload2',
+      array(
+        'label' => 'Brand Partner 2',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload2'
+      )
+    )
+  );
+
+  $wp_customize->add_setting('img-upload3');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload3',
+      array(
+        'label' => 'Brand Partner 3',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload3'
+      )
+    )
+  );
+
+  $wp_customize->add_setting('img-upload4');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload4',
+      array(
+        'label' => 'Brand Partner 4',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload4'
+      )
+    )
+  );
+
+  $wp_customize->add_setting('img-upload5');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload5',
+      array(
+        'label' => 'Brand Partner 5',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload5'
+      )
+    )
+  );
+
+  $wp_customize->add_setting('img-upload6');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'img-upload6',
+      array(
+        'label' => 'Brand Partner 6',
+        'section' => 'example_section_one',
+        'settings' => 'img-upload6',
+      )
+    )
+  );
+
+  $wp_customize->add_section(
+    'example_section_two',
+    array(
+      'title' => 'Socials',
+      'description' => 'Add up to 2 social contacts for your footer.',
+      'priority' => 45,
+    )
+  );
+
+  $wp_customize->add_setting('social-link1');
+  $wp_customize->add_setting('social-image1');
+
+  $wp_customize->add_control(
+    'social-link1',
+    array(
+      'label' => 'Social link 1',
+      'section' => 'example_section_two',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'social-image1',
+      array(
+        'label' => 'Social Image 1',
+        'section' => 'example_section_two',
+        'settings' => 'social-image1',
+      )
+    )
+  );
+
+  $wp_customize->add_setting('social-link2');
+  $wp_customize->add_setting('social-image2');
+
+  $wp_customize->add_control(
+    'social-link2',
+    array(
+      'label' => 'Social link 2',
+      'section' => 'example_section_two',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'social-image2',
+      array(
+        'label' => 'Social Image 2',
+        'section' => 'example_section_two',
+        'settings' => 'social-image2',
+      )
+    )
+  );
+
+  $wp_customize->add_section(
+    'example_section_three',
+    array(
+      'title' => 'Contacts',
+      'description' => 'Add up to 2 professional contacts for your footer.',
+      'priority' => 47,
+    )
+  );
+
+  $wp_customize->add_setting('title1');
+  $wp_customize->add_setting('phone1');
+  $wp_customize->add_setting('mail1');
+
+  $wp_customize->add_control(
+    'title1',
+    array(
+      'label' => 'Work title 1',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'phone1',
+    array(
+      'label' => 'Phone number 1',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'mail1',
+    array(
+      'label' => 'Email adress 1',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_setting('title2');
+  $wp_customize->add_setting('phone2');
+  $wp_customize->add_setting('mail2');
+
+  $wp_customize->add_control(
+    'title2',
+    array(
+      'label' => 'Work title 2',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'phone2',
+    array(
+      'label' => 'Phone number 2',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'mail2',
+    array(
+      'label' => 'Email adress 2',
+      'section' => 'example_section_three',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_section(
+    'example_section_four',
+    array(
+      'title' => 'Services',
+      'description' => 'Add up to 4 services to display to your clients.',
+      'priority' => 49,
+    )
+  );
+
+  $wp_customize->add_setting('image_service1');
+  $wp_customize->add_setting('title_service1');
+  $wp_customize->add_setting('url1');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'image-service1',
+      array(
+        'label' => 'Image Service 1',
+        'section' => 'example_section_four',
+        'settings' => 'image_service1',
+      )
+    )
+  );
+
+  $wp_customize->add_control(
+    'title_service1',
+    array(
+      'label' => 'Replacement text for service 1',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'url1',
+    array(
+      'label' => 'Link for image',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_setting('image_service2');
+  $wp_customize->add_setting('title_service2');
+  $wp_customize->add_setting('url2');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'image-service2',
+      array(
+        'label' => 'Image Service 2',
+        'section' => 'example_section_four',
+        'settings' => 'image_service2',
+      )
+    )
+  );
+
+  $wp_customize->add_control(
+    'title_service2',
+    array(
+      'label' => 'Replacement text for service 2',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'url2',
+    array(
+      'label' => 'Link for image',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_setting('image_service3');
+  $wp_customize->add_setting('title_service3');
+  $wp_customize->add_setting('url3');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'image-service3',
+      array(
+        'label' => 'Image Service 3',
+        'section' => 'example_section_four',
+        'settings' => 'image_service3',
+      )
+    )
+  );
+
+  $wp_customize->add_control(
+    'title_service3',
+    array(
+      'label' => 'Replacement text for service 3',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'url3',
+    array(
+      'label' => 'Link for image',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_setting('image_service4');
+  $wp_customize->add_setting('title_service4');
+  $wp_customize->add_setting('url4');
+
+  $wp_customize->add_control(
+    new WP_Customize_Image_Control(
+      $wp_customize,
+      'image-service4',
+      array(
+        'label' => 'Image Service 4',
+        'section' => 'example_section_four',
+        'settings' => 'image_service4',
+      )
+    )
+  );
+
+  $wp_customize->add_control(
+    'title_service4',
+    array(
+      'label' => 'Replacement text for service 4',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+
+  $wp_customize->add_control(
+    'url4',
+    array(
+      'label' => 'Link for image',
+      'section' => 'example_section_four',
+      'type' => 'text',
+    )
+  );
+}
+add_action('customize_register', 'customizer');
 
 function html5_search_form( $form ) {
-    $form = '<section class="search"><form role="search" method="get" id="search-form" action="' . home_url( '/' ) . '" >
-    <label class="screen-reader-text" for="s">' . __('',  'domain') . '</label>
-     <input type="search" value="' . get_search_query() . '" name="s" id="searchinput" placeholder="Type to search" />
-     <input type="submit" id="searchsubmit" value="'. esc_attr__('Go', 'domain') .'" />
-     </form></section>';
-    return $form;
+  $form = '<section class="search"><form role="search" method="get" id="search-form" action="' . home_url( '/' ) . '" >
+  <label class="screen-reader-text" for="s">' . __('',  'domain') . '</label>
+   <input type="search" value="' . get_search_query() . '" name="s" id="searchinput" placeholder="Type to search" />
+   <input type="submit" id="searchsubmit" value="'. esc_attr__('Go', 'domain') .'" />
+   </form></section>';
+  return $form;
 }
 
+
 add_filter( 'get_search_form', 'html5_search_form' );
-
-    
-
-
-
-
-
