@@ -85,11 +85,15 @@ function html5_search_form( $form ) {
     return $form;
 }
 
+function get_all_categories() {
+    $categories = get_categories();
+    echo "<ul>";
+    foreach($categories as $category) {
+        echo '<li><a href="' . get_category_link($category->term_id) . '">' . $category->name . '</a></li>';
+    }
+    echo "</ul>";
+}
+
 add_filter( 'get_search_form', 'html5_search_form' );
-
-    
-
-
-
-
+add_filter( 'get_all_categories', 'get_all_categories' );
 
