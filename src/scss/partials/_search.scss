@@ -6,10 +6,15 @@
   border: unset;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: var(--text-color);
+  border-bottom-color: var(--white);
+  color: var(--white);
+  background-color: var(--main-color);
   margin: 1em 0;
   padding: 0.5em;
   ::after{
     justify-content: end;
+  }
+  ::placeholder {
+    color: var(--white);
   }
 }

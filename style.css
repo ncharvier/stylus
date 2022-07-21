@@ -12147,6 +12147,36 @@ body main {
   flex-grow: 1;
 }
 
+#site-header #menu-btn {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+#site-header #menu-btn svg {
+  fill: var(--text-color);
+}
+
+#site-header nav {
+  display: none;
+}
+
+#site-header.open {
+  background-color: var(--main-color);
+}
+
+#site-header.open nav {
+  display: block;
+}
+
+#site-header.open #menu-btn svg {
+  fill: var(--white);
+}
+
 #main-footer {
   padding: 2.5rem 10vw;
   background-color: var(--main-color);
@@ -12154,10 +12184,6 @@ body main {
 }
 
 #main-footer svg {
-  fill: var(--white);
-}
-
-#main-footer .footer-logo {
   fill: var(--white);
 }
 
@@ -12169,12 +12195,26 @@ body main {
   border: unset;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: var(--text-color);
+  border-bottom-color: var(--white);
+  color: var(--white);
+  background-color: var(--main-color);
   margin: 1em 0;
   padding: 0.5em;
 }
 
 #searchinput ::after {
   justify-content: end;
+}
+
+#searchinput ::-moz-placeholder {
+  color: var(--white);
+}
+
+#searchinput :-ms-input-placeholder {
+  color: var(--white);
+}
+
+#searchinput ::placeholder {
+  color: var(--white);
 }
 

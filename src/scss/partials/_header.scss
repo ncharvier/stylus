@@ -1,0 +1,33 @@
+#site-header{
+  #menu-btn {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    svg {
+      fill: var(--text-color);
+    }
+  }
+
+  nav{
+    display: none;
+  }
+
+  &.open{
+    background-color: var(--main-color);
+
+    nav{
+      display: block;
+    }
+
+    #menu-btn {
+      svg {
+        fill: var(--white);
+      }
+    }
+  }
+}

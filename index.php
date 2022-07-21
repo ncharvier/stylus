@@ -5,7 +5,6 @@
             <div class="row">
                 <div class="col-6 offset-3">
                     test
-                    <?php get_search_form(); ?>
                 </div>
             </div>
         </div>
